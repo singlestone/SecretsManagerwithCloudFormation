@@ -72,13 +72,11 @@ def physical_resource_id(event):
 # Generate and return a random string for a password
 # Uses straight defaults for get_random_password method
 def generate_secret_pwd(region_name):
-    endpoint_url = "https://secretsmanager.us-east-1.amazonaws.com"
 
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name,
-        endpoint_url=endpoint_url
     )
     secret_pwd = client.get_random_password()
     secret_pwd = secret_pwd['RandomPassword']
@@ -103,13 +101,11 @@ def get_secret_password(event, response):
 
 # Calls the get_secret_value method to retrieve the password for a given SecretName
 def get_secret(secret_name, region_name):
-    endpoint_url = "https://secretsmanager.us-east-1.amazonaws.com"
 
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name,
-        endpoint_url=endpoint_url
     )
 
     try:
@@ -163,14 +159,12 @@ def upsert_secret(event, secret_pwd):
     secret_username = event['ResourceProperties']['SecretUserName']
     secret_desc = event['ResourceProperties']['SecretDescription']
     secret_name = event['ResourceProperties']['SecretName']
-    endpoint_url = 'https://secretsmanager.us-east-1.amazonaws.com'
     secret_string = json.dumps({'username':secret_username,'password':secret_pwd})
 
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name,
-        endpoint_url=endpoint_url
     )
 
     try:
